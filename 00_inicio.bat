@@ -1,7 +1,17 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo Comprobando Git, Docker y Visual Studio Code...
+echo Comprobando Git, Docker, Python y Visual Studio Code...
+
+rem --- Comprobar Python ---
+where python >nul 2>&1
+if !errorlevel!==0 (
+    for /f "tokens=*" %%i in ('python --version 2^>nul') do set PYTHON_VER=%%i
+    echo Python instalado: !PYTHON_VER!
+) else (
+    echo Python no encontrado.
+    echo Por favor instale Python desde https://www.python.org/ y asegurese de agregarlo al PATH.
+)
 
 rem --- Comprobar Git ---
 where git >nul 2>&1
@@ -61,8 +71,43 @@ if exist "%CD%\%REPO_DIR%" (
     )
 )
 
-rem --- Entrar al repositorio y ejecutar el proyecto ---
-cd Introduccion && 01_encadenador.bat
+rem --- Entrar al repositorio ---
+cd Introduccion
+
+rem --- Crear y activar entorno virtual Python (env) ---
+set "ENV_DIR=env"
+
+if not exist "%ENV_DIR%" (
+    echo.
+    echo Creando el entorno virtual '%ENV_DIR%'...
+    python -m venv %ENV_DIR%
+    if !errorlevel!==0 (
+        echo Entorno virtual creado exitosamente.
+    ) else (
+        echo Error al crear el entorno virtual.
+    )
+) else (
+    echo.
+    echo El entorno virtual '%ENV_DIR%' ya existe.
+)
+
+if exist "%ENV_DIR%\Scripts\activate.bat" (
+    echo Activando entorno virtual...
+    call "%ENV_DIR%\Scripts\activate.bat"
+    
+    rem --- Instalar dependencias si existe requirements.txt ---
+    if exist "requirements.txt" (
+        echo Instalando dependencias desde requirements.txt...
+        pip install -r requirements.txt
+    )
+) else (
+    echo ADVERTENCIA: No se pudo activar el entorno virtual.
+)
+
+rem --- Ejecutar el siguiente script de la secuencia ---
+if exist "01_encadenador.bat" (
+    call 01_encadenador.bat
+)
 
 echo Proceso finalizado.
 endlocal
