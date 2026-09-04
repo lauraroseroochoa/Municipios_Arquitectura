@@ -16,8 +16,19 @@ echo.
 echo Docker listo.
 
 echo.
-echo Ejecutando script de creacion de BD...
-call .\02_creacionBD.bat
+echo Esperando a que VSCode este listo...
+
+start "" code .
+
+:waitVSCode
+timeout /t 1 /nobreak >nul
+tasklist /FI "IMAGENAME eq Code.exe" 2>nul | find /I "Code.exe" >nul
+if errorlevel 1 goto waitVSCode
+
+echo.
+echo VSCode listo.
+
+powershell -command "Start-Sleep 5; $wshell = New-Object -ComObject WScript.Shell; $wshell.AppActivate('Visual Studio Code'); Start-Sleep 2; $wshell.SendKeys('^~'); Start-Sleep 2; $wshell.SendKeys('.\02_creacionBD.bat{ENTER}')"
 
 :waitMariaDB
 docker exec mariadb_db mariadb -u root -proot123 -e "USE entidadesTerritorialesColombia; SHOW TABLES;" >nul 2>&1
@@ -26,9 +37,4 @@ if errorlevel 1 (
     goto waitMariaDB
 )
 
-echo.
-echo Abriendo VSCode y conectando a la terminal interactiva...
-start "" code .
-
-rem Abrimos directamente la consola interactiva de MariaDB en una ventana/terminal secundaria limpia
-start cmd /k "docker exec -it mariadb_db mariadb -u root -proot123 entidadesTerritorialesColombia"
+powershell -command "Start-Sleep 1; $wshell = New-Object -ComObject WScript.Shell; $wshell.AppActivate('Visual Studio Code'); Start-Sleep 1; $wshell.SendKeys('^+5'); Start-Sleep 2; $wshell.SendKeys('.\03_conexionBD.bat{ENTER}')"
