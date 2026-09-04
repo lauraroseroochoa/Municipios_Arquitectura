@@ -28,7 +28,7 @@ if errorlevel 1 goto waitVSCode
 echo.
 echo VSCode listo.
 
-powershell -command "Start-Sleep 5; $wshell = New-Object -ComObject WScript.Shell; $wshell.AppActivate('Visual Studio Code'); Start-Sleep 2; $wshell.SendKeys('^~'); Start-Sleep 2; $wshell.SendKeys('.\02_creacionBD.bat{ENTER}')"
+powershell -command "Start-Sleep 3; $wshell = New-Object -ComObject WScript.Shell; $wshell.AppActivate('Visual Studio Code'); Start-Sleep 1; $wshell.SendKeys('%%t'); Start-Sleep -Milliseconds 400; $wshell.SendKeys('n'); Start-Sleep 2; $wshell.SendKeys('.\02_creacionBD.bat{ENTER}')"
 
 :waitMariaDB
 docker exec mariadb_db mariadb -u root -proot123 -e "USE entidadesTerritorialesColombia; SHOW TABLES;" >nul 2>&1
