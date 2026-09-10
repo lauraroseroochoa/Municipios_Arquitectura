@@ -51,8 +51,8 @@ echo Visual Studio Code instalado. Version: !CODE_VER!
 
 rem --- Clonar repositorio si no existe ---
 :clone
-set REPO_URL=https://github.com/lauraroseroochoa/Introduccion.git
-set REPO_DIR=Introduccion
+set REPO_URL=https://github.com/lauraroseroochoa/Municipios_Arquitectura.git
+set REPO_DIR=Municipios_Arquitectura
 
 if exist "%CD%\%REPO_DIR%" (
     echo El repositorio ya existe en %CD%\%REPO_DIR%. Se intentara actualizar.
