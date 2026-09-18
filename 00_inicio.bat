@@ -72,7 +72,7 @@ if exist "%CD%\%REPO_DIR%" (
 )
 
 rem --- Entrar al repositorio ---
-cd Introduccion
+cd Municipios_Arquitectura
 
 rem --- Crear y activar entorno virtual Python (env) ---
 set "ENV_DIR=env"
